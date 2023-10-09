@@ -35,6 +35,9 @@ public class CarController : MonoBehaviour
     private Vector2 playerInputs;
     private bool breakActive;
 
+    [SerializeField] private float lerpSpeed = 2f;
+    private float lerpTime;
+
 
     private void OnEnable(){
         Car.Enable();
@@ -72,8 +75,11 @@ public class CarController : MonoBehaviour
             }
 
             if(elements.shouldSteer){
-                elements.leftWheelCollider.steerAngle = steer;
-                elements.rightWheelCollider.steerAngle = steer;
+                lerpTime += Time.fixedDeltaTime;
+                float percentCompleted = lerpTime/lerpSpeed;
+
+                elements.leftWheelCollider.steerAngle = Mathf.Lerp(elements.leftWheelCollider.steerAngle, steer, percentCompleted);
+                elements.rightWheelCollider.steerAngle = Mathf.Lerp(elements.rightWheelCollider.steerAngle, steer, percentCompleted);
             }
 
             if(elements.addBreakTorque){
